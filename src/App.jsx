@@ -1,6 +1,23 @@
+import {useState} from 'react';
+
 function Square() {
+
+  var [state, setState] = useState("X");
+
+  function toggleState() {
+    if (state === "") {
+      setState("X")
+    }
+    else if (state === "X") {
+      setState("O")
+    }
+    else {
+      setState("")
+    }
+  }
+
   return (
-    <button className="square">X</button>
+    <button className="square" onClick={toggleState}>{state}</button>
   );
 }
 
