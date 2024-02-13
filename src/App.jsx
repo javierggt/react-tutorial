@@ -70,12 +70,46 @@ function Board(props) {
 
 export default function App() {
   const [next, setNext] = useState("X");
-  const [squares, setSquares] = useState(Array(9).fill(null));
+  const [history, setHistory] = useState([Array(9).fill(null)]);
+  const [currentMove, setCurrentMove] = useState(0);
+  const squares = history[currentMove];
 
   function handleClick(newSquares) {
-    setSquares(newSquares);
+    // IMPORTANT. We do not do the following (try it):
+    // setHistory([...history.slice(0,currentMove+1), newSquares])
+    // setCurrentMove(history.length -1);
+    const nextHistory = [...history.slice(0,currentMove+1), newSquares];
+    setHistory([...history.slice(0,currentMove+1), newSquares]);
+    setCurrentMove(nextHistory.length -1);
     setNext(next === "X" ? "O" : "X");
   }
 
-  return <Board squares={squares} next={next} handleClick={handleClick}/>;
+  function jumpToMove(nextMove) {
+    setCurrentMove(nextMove);
+  }
+
+  const moves = history.map((squares, move) => {
+    let description;
+    if (move > 0) {
+      description = 'Go to move #' + move;
+    } else {
+      description = 'Go to game start';
+    }
+    return (
+      <li>
+        <button onClick={() => jumpToMove(move)}>{description}</button>
+      </li>
+    );
+  });
+
+  return (
+    <>
+      <div className="game-board">
+        <Board squares={squares} next={next} handleClick={handleClick}/>;
+      </div>
+      <div className="game-info">
+        <ol>{moves}</ol>
+      </div>
+    </>
+  )
 }
