@@ -96,7 +96,7 @@ export default function App() {
       description = 'Go to game start';
     }
     return (
-      <li>
+      <li key={move}>
         <button onClick={() => jumpToMove(move)}>{description}</button>
       </li>
     );
